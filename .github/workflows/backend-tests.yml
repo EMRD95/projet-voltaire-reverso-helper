@@ -1,0 +1,36 @@
+name: Tests Backend Reverso
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "release/**"]
+    paths:
+      - "Backend_Reverso/**"
+      - ".github/workflows/backend-tests.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "Backend_Reverso/**"
+      - ".github/workflows/backend-tests.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend_Reverso
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Lint syntax
+        run: |
+          python -m py_compile voltaire_check.py
+          python -m py_compile voltaire_local_server.py
+
+      - name: Run unit tests
+        run: python -m unittest test_voltaire_check.py test_voltaire_local_server.py -v
