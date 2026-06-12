@@ -4,8 +4,18 @@ import time
 import unittest
 import urllib.error
 import urllib.request
+from unittest.mock import patch
 
 import voltaire_local_server as srv
+
+
+def _fake_reverso(phrase):
+    # Correction connue pour le test, sans appel réseau.
+    corrections = {
+        "Je sui content de te voire demain.": "Je suis content de te voir demain.",
+        "Nous attendont la réponse de l'agence.": "Nous attendons la réponse de l'agence.",
+    }
+    return corrections.get(phrase, phrase)
 
 
 class LocalServerTests(unittest.TestCase):
@@ -21,6 +31,13 @@ class LocalServerTests(unittest.TestCase):
         cls.httpd.shutdown()
         cls.httpd.server_close()
         cls.thread.join(timeout=2)
+
+    def setUp(self):
+        self._reverso_patcher = patch("voltaire_local_server.vc.call_reverso", side_effect=_fake_reverso)
+        self._reverso_patcher.start()
+
+    def tearDown(self):
+        self._reverso_patcher.stop()
 
     def post_json(self, payload):
         data = json.dumps(payload).encode("utf-8")
