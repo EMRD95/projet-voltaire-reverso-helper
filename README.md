@@ -38,6 +38,16 @@ L'objectif est d'**augmenter** la plateforme avec les connaissances de l'outil [
    - **IL N'Y A PAS DE FAUTE** avec Voltaire content 😊
    - Le(s) mot(s) modifié(s) par Reverso sont en **gras/souligné**
 
+### 📸 Aperçu du panneau
+
+<p align="center">
+  <img src="Screenshots/faute-probable.png" width="45%" alt="Panneau FAUTE PROBABLE" />
+  <img src="Screenshots/il-n-y-a-pas-de-faute.png" width="45%" alt="Panneau IL N'Y A PAS DE FAUTE" />
+</p>
+
+> À gauche : une faute détectée avec le mot suspect en gras/souligné et Voltaire fâché.
+> À droite : aucune faute, Voltaire est content. Le panneau est pliable via le bouton Plier/Déplier.
+
 ---
 
 ## 📁 Structure du projet
