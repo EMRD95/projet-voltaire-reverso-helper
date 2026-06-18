@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Projet Voltaire - Reverso Local Helper
+// @name         Projet Voltaire - Correcteur Local Pro
 // @namespace    local.voltaire.helper
-// @version      1.4.2
-// @description  Lit la phrase Projet Voltaire sur demande et demande au serveur local Reverso s'il y a une faute.
+// @version      4.0.0
+// @description  Lit la phrase Projet Voltaire et demande au backend local s'il y a une faute (koboldcpp ou Reverso).
 // @match        projet-voltaire.fr/*
 // @match        *.projet-voltaire.fr/*
 // @connect      127.0.0.1
@@ -21,6 +21,8 @@
   let collapsed = false;
   let lastVisibleSignature = '';
   let lastPhrase = '';
+  let errorBackoffPhrase = '';
+  let errorBackoffUntil = 0;
   let busy = false;
   let requestSeq = 0;
 
@@ -399,7 +401,7 @@
           url: SERVER,
           data: payload,
           headers: { 'Content-Type': 'application/json' },
-          timeout: 20000,
+          timeout: 60000,
           onload: (res) => {
             try {
               const obj = JSON.parse(res.responseText || '{}');
@@ -486,12 +488,20 @@
       ok: result.ok,
       has_error: result.has_error,
       result: result.result,
+      provider: result.provider,
       phrase: result.phrase,
       corrected: result.corrected,
+      error_span: result.error_span,
+      explanation: result.explanation,
+      confidence: result.confidence,
     }, null, 2));
+    const explanation = result.explanation
+      ? '<div style="margin-top:10px"><b>Analyse :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + escapeHtml(result.explanation) + '</div></div>'
+      : '';
     const common =
-      '<div style="font-size:12px;opacity:.75;margin-bottom:8px">maj ' + new Date().toLocaleTimeString() + ' · Reverso ' + elapsedMs + 'ms</div>' +
-      '<div style="margin-top:8px"><b>Phrase récupérée :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + phrase + '</div></div>';
+      '<div style="font-size:12px;opacity:.75;margin-bottom:8px">maj ' + new Date().toLocaleTimeString() + ' · ' + escapeHtml(result.provider || 'correcteur') + ' ' + elapsedMs + 'ms</div>' +
+      '<div style="margin-top:8px"><b>Phrase récupérée :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + phrase + '</div></div>' +
+      explanation;
     if (result.has_error) {
       return {
         mode: 'bad',
@@ -515,6 +525,16 @@
     const snap = visibleSnapshot();
     if (!snap.text || snap.signature === lastVisibleSignature) return;
     lastVisibleSignature = snap.signature;
+    if (snap.phrase && snap.phrase === lastPhrase && reason !== 'manual') {
+      // Projet Voltaire met à jour timers/progression/animations : ces mutations
+      // changent le snapshot mais pas la phrase. Ne rappelle pas Reverso pour ça.
+      return;
+    }
+    if (snap.phrase && snap.phrase === errorBackoffPhrase && Date.now() < errorBackoffUntil && reason !== 'manual') {
+      // Si Reverso renvoie une limite temporaire, ne pas marteler l'API à chaque
+      // poll/mutation. Le bouton Démarrer force quand même une nouvelle tentative.
+      return;
+    }
 
     const seq = ++requestSeq;
     busy = true;
@@ -528,18 +548,18 @@
         return;
       }
       const elapsed = Math.round(performance.now() - started);
-      if (result.phrase === lastPhrase && reason !== 'manual') {
-        // Même phrase : garde l'affichage actuel, pas besoin de spammer Reverso.
-        return;
-      }
       lastPhrase = result.phrase;
       const rendered = renderResult(result, elapsed);
       setPanel(rendered.html, rendered.mode);
     } catch (e) {
+      if (snap.phrase) {
+        errorBackoffPhrase = snap.phrase;
+        errorBackoffUntil = Date.now() + 60000;
+      }
       setPanel(
         '<b>Voltaire Helper</b>' +
-        '<div style="margin-top:6px;color:#fed7aa">Serveur local non joignable ou erreur Reverso.</div>' +
-        '<div style="font-size:12px;opacity:.85;margin-top:5px">Lance RUN_VOLTAIRE_SERVER.cmd puis recharge la page.</div>' +
+        '<div style="margin-top:6px;color:#fed7aa">Serveur local non joignable ou erreur correcteur local.</div>' +
+        '<div style="font-size:12px;opacity:.85;margin-top:5px">Si le serveur est lancé, attends 1 minute puis clique sur Arrêter/Démarrer.</div>' +
         '<div style="font-size:12px;opacity:.7;margin-top:5px">' + escapeHtml(e.message || e) + '</div>',
         'err'
       );

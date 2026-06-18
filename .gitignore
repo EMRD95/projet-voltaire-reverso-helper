@@ -1,4 +1,4 @@
-__pycache__/
+Backend_Reverso/tools/
+Backend_Reverso/__pycache__/
 *.pyc
-*.pyo
-.DS_Store
+Backend_Reverso/koboldcpp_config.cmd

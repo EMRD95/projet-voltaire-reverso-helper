@@ -1,34 +1,75 @@
-# 🏰 Projet Voltaire Reverso Helper
+# 🏰 Projet Voltaire Helper
 
 <p align="center">
   <img src="Screenshots/faute-probable.png" width="45%" alt="Panneau FAUTE PROBABLE" />
   <img src="Screenshots/il-n-y-a-pas-de-faute.png" width="45%" alt="Panneau IL N'Y A PAS DE FAUTE" />
 </p>
 
-<p align="center">
-  <img src="Tampermonkey/assets/voltaire_happy.png" width="64" alt="Voltaire content" />
-  <img src="Tampermonkey/assets/voltaire_mad.png" width="64" alt="Voltaire fâché" />
-</p>
+**Un assistant d'entraînement pour Projet Voltaire.** Le script ne clique pas à ta place, il affiche l'analyse pour t'aider à apprendre l'orthographe et la grammaire avant de soumettre ta réponse.
 
-**Un assistant d'entraînement pour Projet Voltaire.** Le script ne clique pas à ta place, il affiche l'analyse de [Reverso](https://www.reverso.net/orthographe/) pour t'aider à apprendre l'orthographe et la grammaire avant de soumettre ta réponse.
+Deux backends au choix :
+
+| Backend | Type | Avantage | Inconvénient |
+|---------|------|----------|-------------|
+| **koboldcpp** | LLM local | Illimité, privé, rapide | Nécessite un modèle GGUF |
+| **Reverso** | API web | Zéro setup | Rate-limité, public |
 
 ---
 
 ## 🧠 Fonctionnement
 
 ```
-Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM React)
-                                   ↓
-                        Backend local :8765 → API Reverso gratuite
-                                   ↓
-                        Panneau flottant : résultat + correction
+Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM)
+                             ↓
+                  Backend local :8765 → koboldcpp ou Reverso
+                             ↓
+                  Panneau flottant : résultat + correction
 ```
 
-1. **Userscript Tampermonkey** : extrait la phrase depuis le DOM React Native Web
-2. **Backend Python local** (`localhost:8765`) : appelle l'API Reverso gratuite
-3. **Panneau flottant déplaçable/pliable** :
-   - **FAUTE PROBABLE** + Voltaire fâché — mot suspect en gras/souligné
-   - **IL N'Y A PAS DE FAUTE** + Voltaire content
+Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le userscript Tampermonkey extrait la phrase depuis le DOM React Native Web et l'envoie au backend.
+
+---
+
+## 🚀 Utilisation
+
+### Option 1 — koboldcpp (LLM local, recommandé)
+
+1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
+2. **Télécharge un modèle GGUF** — [gemma-4-E2B-it-GGUF](https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF/tree/main) recommandé (tourne sur un potato PC, ~2-4 Go RAM)
+3. **Lance koboldcpp** avec le flag `--api` :
+
+```bat
+koboldcpp.exe --model gemma-4-E2B-it-UD-Q4_K_XL.gguf --port 5001 --api --usecublas
+```
+
+4. **Configure** : copie `koboldcpp_config.example.cmd` vers `koboldcpp_config.cmd` et mets le nom du modèle :
+
+```bat
+set VOLTAIRE_KOBOLDCPP_MODEL=gemma-4-E2B-it-UD-Q4_K_XL
+```
+
+5. **Lance le backend** :
+
+```bat
+Backend_Reverso\start_backend.cmd
+```
+
+### Option 2 — Reverso (API web, zéro setup)
+
+```bat
+set VOLTAIRE_CORRECTOR=reverso
+Backend_Reverso\start_backend.cmd
+```
+
+Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
+
+### Installer le userscript
+
+1. Ouvre Tampermonkey → **Create a new script**
+2. Copie/colle `Tampermonkey/tampermonkey_voltaire_helper.user.js`
+3. Sauvegarde
+4. Ouvre Projet Voltaire → le panneau apparaît
+5. **Démarrer** → analyse la phrase affichée
 
 ---
 
@@ -36,10 +77,13 @@ Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM React)
 
 ```text
 ├── Backend_Reverso/
-│   ├── voltaire_local_server.py    # Serveur HTTP CORS
-│   ├── voltaire_check.py           # Extracteur + appel Reverso
-│   ├── start_backend.cmd           # Lancement Windows
-│   ├── test_voltaire_check.py      # Tests extracteur
+│   ├── voltaire_local_server.py      # Serveur HTTP CORS (dual backend)
+│   ├── voltaire_check.py             # Extracteur de phrase + client Reverso
+│   ├── voltaire_koboldcpp.py         # Client koboldcpp (API OpenAI-compatible)
+│   ├── start_backend.cmd             # Lancement Windows
+│   ├── koboldcpp_config.example.cmd  # Exemple config koboldcpp
+│   ├── test_voltaire_check.py
+│   ├── test_voltaire_koboldcpp.py
 │   └── test_voltaire_local_server.py
 ├── Tampermonkey/
 │   ├── tampermonkey_voltaire_helper.user.js
@@ -52,28 +96,17 @@ Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM React)
 
 ---
 
-## 🚀 Utilisation
+## ⚙️ Configuration
 
-### 1. Lancer le backend
+Tout se passe par variables d'environnement :
 
-```bat
-Backend_Reverso\start_backend.cmd
-```
-
-Le serveur écoute sur `http://127.0.0.1:8765`.
-
-### 2. Installer Tampermonkey
-
-1. Ouvrir Tampermonkey → **Create a new script**
-2. Copier/coller `Tampermonkey/tampermonkey_voltaire_helper.user.js`
-3. Sauvegarder
-
-### 3. Utiliser
-
-1. Ouvrir Projet Voltaire dans Chrome
-2. Le panneau apparaît (arrêté par défaut)
-3. **Démarrer** → analyse la phrase affichée
-4. **Plier/Déplier** → cache la réponse avant de soumettre
+| Variable | Défaut | Description |
+|----------|--------|-------------|
+| `VOLTAIRE_CORRECTOR` | `koboldcpp` | `koboldcpp` ou `reverso` |
+| `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp |
+| `VOLTAIRE_KOBOLDCPP_MODEL` | *(vide)* | Nom du modèle chargé dans koboldcpp |
+| `VOLTAIRE_KOBOLDCPP_API_KEY` | *(vide)* | Clé API si configurée |
+| `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP en secondes |
 
 ---
 
@@ -81,27 +114,10 @@ Le serveur écoute sur `http://127.0.0.1:8765`.
 
 ```bash
 cd Backend_Reverso
-python -m unittest test_voltaire_check.py test_voltaire_local_server.py -v
-# 14 tests OK
+python -m unittest discover -v
 ```
 
 CI GitHub Actions : ![CI](https://github.com/EMRD95/projet-voltaire-reverso-helper/actions/workflows/backend-tests.yml/badge.svg)
-
----
-
-## 🛠️ Fonctionnalités
-
-- Extraction DOM React Native Web (`.sentence`, `css-146c3p1`, `r-18u37iz`)
-- API Reverso gratuite (correction orthographique FR)
-- Panneau flottant déplaçable (position mémorisée)
-- Démarrage/arrêt manuel
-- Mode plié/déplié
-- Mot suspect en gras/souligné
-- Images Voltaire content/fâché (base64 inline)
-- Sans code couleur vert/rouge
-- Retry automatique Reverso (403/429/5xx)
-- Fallback texte mode OCR
-- GitHub Actions CI (14 tests)
 
 ---
 

@@ -250,7 +250,7 @@ def analyze_result(original: str, corrected: str) -> Analysis:
     )
 
 
-def call_reverso(text: str, timeout: int = 15) -> str:
+def call_reverso(text: str, timeout: int = 8) -> str:
     payload = {
         "englishDialect": "indifferent",
         "autoReplace": True,
@@ -270,9 +270,11 @@ def call_reverso(text: str, timeout: int = 15) -> str:
     }
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     user_agents = [
-        "ClipboardSpellChecker/1.0",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121 Safari/537.36",
-        "Mozilla/5.0 VoltaireSimple/1.0",
+        # L'endpoint est public mais filtré par Cloudflare : rester proche d'une
+        # requête navigateur réelle évite les 403/500 rapides du User-Agent custom.
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     ]
     last_http_error: urllib.error.HTTPError | None = None
     body = ""
@@ -284,6 +286,9 @@ def call_reverso(text: str, timeout: int = 15) -> str:
                 "Content-Type": "application/json",
                 "User-Agent": user_agent,
                 "Accept": "application/json, text/plain, */*",
+                "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Origin": "https://www.reverso.net",
+                "Referer": "https://www.reverso.net/orthographe/correcteur-francais/",
             },
             method="POST",
         )
@@ -293,12 +298,18 @@ def call_reverso(text: str, timeout: int = 15) -> str:
             break
         except urllib.error.HTTPError as e:
             last_http_error = e
+            detail = e.read().decode("utf-8", errors="replace") if e.fp else ""
+            if e.code == 429:
+                raise RuntimeError(
+                    "Erreur HTTP Reverso 429: limite temporaire atteinte. "
+                    "Attends environ 1 minute avant de relancer une vérification."
+                ) from e
             # Reverso met parfois Cloudflare devant l'endpoint. Dans ce cas,
-            # un retry court avec un autre User-Agent suffit souvent.
-            if e.code in {403, 429, 500, 502, 503, 504} and attempt < len(user_agents):
+            # un retry court avec un autre User-Agent suffit parfois. Ne pas
+            # retenter les 429 : ça aggrave la limite.
+            if e.code in {403, 500, 502, 503, 504} and attempt < len(user_agents):
                 time.sleep(0.6 * attempt)
                 continue
-            detail = e.read().decode("utf-8", errors="replace") if e.fp else ""
             raise RuntimeError(f"Erreur HTTP Reverso {e.code}: {detail[:300]}") from e
         except urllib.error.URLError as e:
             if attempt < len(user_agents):

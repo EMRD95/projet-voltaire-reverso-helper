@@ -2,20 +2,10 @@ import json
 import threading
 import time
 import unittest
-import urllib.error
 import urllib.request
 from unittest.mock import patch
 
 import voltaire_local_server as srv
-
-
-def _fake_reverso(phrase):
-    # Correction connue pour le test, sans appel réseau.
-    corrections = {
-        "Je sui content de te voire demain.": "Je suis content de te voir demain.",
-        "Nous attendont la réponse de l'agence.": "Nous attendons la réponse de l'agence.",
-    }
-    return corrections.get(phrase, phrase)
 
 
 class LocalServerTests(unittest.TestCase):
@@ -33,11 +23,41 @@ class LocalServerTests(unittest.TestCase):
         cls.thread.join(timeout=2)
 
     def setUp(self):
-        self._reverso_patcher = patch("voltaire_local_server.vc.call_reverso", side_effect=_fake_reverso)
-        self._reverso_patcher.start()
+        srv._analysis_cache.clear()
+        self._corrector_patcher = patch.object(srv, "CORRECTOR", "koboldcpp")
+        self._corrector_patcher.start()
+        self._llm_patcher = patch("voltaire_local_server.vk.analyze_phrase", side_effect=self._fake_llm)
+        self.mock_llm = self._llm_patcher.start()
 
     def tearDown(self):
-        self._reverso_patcher.stop()
+        self._llm_patcher.stop()
+        self._corrector_patcher.stop()
+
+    @staticmethod
+    def _fake_llm(phrase):
+        corrections = {
+            "Je sui content de te voire demain.": {
+                "has_error": True,
+                "corrected": "Je suis content de te voir demain.",
+                "error_span": "sui / voire",
+                "explanation": "Conjugaison de être et confusion voir/voire.",
+                "confidence": 0.93,
+            },
+            "Nous attendont la réponse de l'agence.": {
+                "has_error": True,
+                "corrected": "Nous attendons la réponse de l'agence.",
+                "error_span": "attendont",
+                "explanation": "Avec nous, le verbe prend -ons.",
+                "confidence": 0.9,
+            },
+        }
+        return corrections.get(phrase, {
+            "has_error": False,
+            "corrected": phrase,
+            "error_span": "",
+            "explanation": "",
+            "confidence": 0.8,
+        })
 
     def post_json(self, payload):
         data = json.dumps(payload).encode("utf-8")
@@ -77,9 +97,12 @@ class LocalServerTests(unittest.TestCase):
         response, body = self.post_json({"text": raw})
         self.assertEqual(response.status, 200)
         self.assertEqual(response.headers["Access-Control-Allow-Origin"], "*")
+        self.assertEqual(body["provider"], "koboldcpp")
         self.assertEqual(body["phrase"], "Je sui content de te voire demain.")
         self.assertTrue(body["has_error"])
         self.assertEqual(body["corrected"], "Je suis content de te voir demain.")
+        self.assertEqual(body["error_span"], "sui / voire")
+        self.assertIn("voir", body["explanation"])
 
     def test_check_endpoint_prefers_explicit_dom_phrase(self):
         raw = """
@@ -93,10 +116,24 @@ class LocalServerTests(unittest.TestCase):
         self.assertTrue(body["has_error"])
         self.assertIn("attendons", body["corrected"])
 
+    def test_check_endpoint_caches_same_phrase_to_avoid_llm_spam(self):
+        payload = {"text": "", "phrase": "Je sui content de te voire demain."}
+        response1, body1 = self.post_json(payload)
+        response2, body2 = self.post_json(payload)
+        self.assertEqual(response1.status, 200)
+        self.assertEqual(response2.status, 200)
+        self.assertFalse(body1["cached"])
+        self.assertTrue(body2["cached"])
+        self.assertEqual(body2["corrected"], "Je suis content de te voir demain.")
+        self.assertEqual(self.mock_llm.call_count, 1)
+
     def test_health_endpoint(self):
         with urllib.request.urlopen("http://127.0.0.1:8766/health", timeout=5) as r:
             self.assertEqual(r.status, 200)
-            self.assertEqual(json.loads(r.read().decode("utf-8"))["ok"], True)
+            body = json.loads(r.read().decode("utf-8"))
+            self.assertEqual(body["ok"], True)
+            self.assertEqual(body["service"], "voltaire-helper")
+            self.assertEqual(body["corrector"], "koboldcpp")
 
 
 if __name__ == "__main__":
