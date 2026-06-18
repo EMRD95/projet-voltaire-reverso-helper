@@ -45,7 +45,7 @@ koboldcpp.exe --model gemma-4-E2B-it-UD-Q4_K_XL.gguf --port 5001 --api --usecubl
 4. **Lance le backend** (le modèle est auto-détecté, rien à configurer) :
 
 ```bat
-Backend_Reverso\start_backend.cmd
+Backend_Reverso\start_backend_koboldcpp.cmd
 ```
 
 Si koboldcpp tourne sur un autre port, copie `koboldcpp_config.example.cmd` en `koboldcpp_config.cmd` et change le port.
@@ -53,7 +53,7 @@ Si koboldcpp tourne sur un autre port, copie `koboldcpp_config.example.cmd` en `
 ### Option 2 — Reverso (API web, zéro setup)
 
 ```bat
-Backend_Reverso\start_reverso.cmd
+Backend_Reverso\start_backend_reverso.cmd
 ```
 
 Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
@@ -75,8 +75,8 @@ Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité 
 │   ├── voltaire_local_server.py      # Serveur HTTP CORS (dual backend)
 │   ├── voltaire_check.py             # Extracteur de phrase + client Reverso
 │   ├── voltaire_koboldcpp.py         # Client koboldcpp (API OpenAI-compatible)
-│   ├── start_backend.cmd               # Lancement koboldcpp
-│   ├── start_reverso.cmd                # Lancement Reverso
+│   ├── start_backend_koboldcpp.cmd      # Lancement koboldcpp
+│   ├── start_backend_reverso.cmd        # Lancement Reverso
 │   ├── koboldcpp_config.example.cmd  # Exemple config koboldcpp
 │   ├── test_voltaire_check.py
 │   ├── test_voltaire_koboldcpp.py
