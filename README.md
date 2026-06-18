@@ -1,6 +1,11 @@
 # 🏰 Projet Voltaire Helper
 
 <p align="center">
+  <img src="Tampermonkey/assets/voltaire_happy.png" width="64" alt="Voltaire content" />
+  <img src="Tampermonkey/assets/voltaire_mad.png" width="64" alt="Voltaire fâché" />
+</p>
+
+<p align="center">
   <img src="Screenshots/faute-probable.png" width="45%" alt="Panneau FAUTE PROBABLE" />
   <img src="Screenshots/il-n-y-a-pas-de-faute.png" width="45%" alt="Panneau IL N'Y A PAS DE FAUTE" />
 </p>
