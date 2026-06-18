@@ -103,7 +103,7 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
             "Crée une clé sur https://platform.deepseek.com/api_keys"
         )
 
-    endpoint = BASE_URL + "/v1/chat/completions"
+    endpoint = BASE_URL + "/chat/completions"
     payload = {
         "model": MODEL,
         "temperature": 0.0,
