@@ -498,23 +498,24 @@
     const explanation = result.explanation
       ? '<div style="margin-top:10px"><b>Analyse :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + escapeHtml(result.explanation) + '</div></div>'
       : '';
+    const providerLabel = { koboldcpp: 'koboldcpp', deepseek: 'DeepSeek', reverso: 'Reverso' }[result.provider] || (result.provider || 'correcteur');
     const common =
-      '<div style="font-size:12px;opacity:.75;margin-bottom:8px">maj ' + new Date().toLocaleTimeString() + ' · ' + escapeHtml(result.provider || 'correcteur') + ' ' + elapsedMs + 'ms</div>' +
+      '<div style="font-size:12px;opacity:.75;margin-bottom:8px">maj ' + new Date().toLocaleTimeString() + ' · ' + escapeHtml(providerLabel) + ' ' + elapsedMs + 'ms</div>' +
       '<div style="margin-top:8px"><b>Phrase récupérée :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + phrase + '</div></div>' +
       explanation;
     if (result.has_error) {
       return {
         mode: 'bad',
         html: '<div style="position:relative;padding-right:56px"><b style="font-size:16px">FAUTE PROBABLE</b>' + voltaireFace('angry') + '</div>' + common +
-          '<div style="font-size:12px;opacity:.8;margin-top:6px">Le ou les mots soulignés/gras indiquent la zone modifiée par Reverso.</div>' +
-          '<div style="margin-top:10px"><b>Correction Reverso :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + corrected + '</div></div>' +
+          '<div style="font-size:12px;opacity:.8;margin-top:6px">Le ou les mots soulignés/gras indiquent la zone modifiée par ' + escapeHtml(providerLabel) + '.</div>' +
+          '<div style="margin-top:10px"><b>Correction ' + escapeHtml(providerLabel) + ' :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + corrected + '</div></div>' +
           '<details style="margin-top:10px"><summary>Détails JSON API locale</summary><pre style="white-space:pre-wrap;font-size:12px;background:rgba(0,0,0,.25);padding:8px;border-radius:8px;max-height:180px;overflow:auto">' + apiJson + '</pre></details>'
       };
     }
     return {
       mode: 'ok',
       html: '<div style="position:relative;padding-right:56px"><b style="font-size:16px">IL N\'Y A PAS DE FAUTE</b>' + voltaireFace('happy') + '</div>' + common +
-        '<div style="margin-top:10px"><b>Réponse Reverso :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + corrected + '</div></div>' +
+        '<div style="margin-top:10px"><b>Réponse ' + escapeHtml(providerLabel) + ' :</b><br><div style="margin-top:4px;padding:8px;background:rgba(255,255,255,.08);border-radius:8px">' + corrected + '</div></div>' +
         '<details style="margin-top:10px"><summary>Détails JSON API locale</summary><pre style="white-space:pre-wrap;font-size:12px;background:rgba(0,0,0,.25);padding:8px;border-radius:8px;max-height:180px;overflow:auto">' + apiJson + '</pre></details>'
     };
   }
@@ -527,11 +528,11 @@
     lastVisibleSignature = snap.signature;
     if (snap.phrase && snap.phrase === lastPhrase && reason !== 'manual') {
       // Projet Voltaire met à jour timers/progression/animations : ces mutations
-      // changent le snapshot mais pas la phrase. Ne rappelle pas Reverso pour ça.
+      // changent le snapshot mais pas la phrase. Ne rappelle pas le backend pour ça.
       return;
     }
     if (snap.phrase && snap.phrase === errorBackoffPhrase && Date.now() < errorBackoffUntil && reason !== 'manual') {
-      // Si Reverso renvoie une limite temporaire, ne pas marteler l'API à chaque
+      // Si le correcteur renvoie une erreur temporaire, ne pas marteler à chaque
       // poll/mutation. Le bouton Démarrer force quand même une nouvelle tentative.
       return;
     }
