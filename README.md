@@ -36,12 +36,7 @@ Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le 
 
 1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
 2. **Télécharge un modèle GGUF** — [`gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF/resolve/main/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~10 Go RAM)
-3. **Lance koboldcpp** :
-
-```bat
-koboldcpp.exe --model gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf --port 5001 --api --usecublas
-```
-
+3. **Lance koboldcpp** avec le modèle de ton choix et l'API activée (flag `--api` en CLI, ou coche « Start Kobold API » dans le launcher)
 4. **Lance le backend** (le modèle est auto-détecté, rien à configurer) :
 
 ```bat
