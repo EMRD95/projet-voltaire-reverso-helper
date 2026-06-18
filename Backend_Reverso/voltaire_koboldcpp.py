@@ -2,15 +2,10 @@
 """Client koboldcpp pour Voltaire Helper.
 
 koboldcpp expose une API OpenAI-compatible (flag --api ou « Start Kobold API »
-dans le launcher Windows).
-
-Ce module envoie uniquement la phrase Projet Voltaire + un prompt système
-strict et attend un JSON court, facile à afficher par le userscript.
+dans le launcher Windows). Le nom du modèle est auto-détecté via /api/v1/model.
 
 Configuration via variables d'environnement :
   VOLTAIRE_KOBOLDCPP_BASE_URL   URL de base koboldcpp (défaut: http://127.0.0.1:5001)
-  VOLTAIRE_KOBOLDCPP_API_KEY    Clé API si configurée (défaut: vide)
-  VOLTAIRE_KOBOLDCPP_MODEL      Nom du modèle chargé dans koboldcpp
   VOLTAIRE_KOBOLDCPP_TIMEOUT    Timeout HTTP en secondes (défaut: 90)
 """
 
@@ -24,9 +19,9 @@ import urllib.request
 from typing import Any
 
 BASE_URL = os.environ.get("VOLTAIRE_KOBOLDCPP_BASE_URL", "http://127.0.0.1:5001").rstrip("/")
-API_KEY = os.environ.get("VOLTAIRE_KOBOLDCPP_API_KEY", "").strip()
-MODEL = os.environ.get("VOLTAIRE_KOBOLDCPP_MODEL", "").strip()
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_KOBOLDCPP_TIMEOUT", "90"))
+
+_model_cache: str | None = None
 
 SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
 Objectif: dire si la phrase contient une faute d'orthographe, grammaire, conjugaison ou accord.
@@ -53,13 +48,31 @@ class KoboldCppUnavailable(RuntimeError):
     pass
 
 
+def _detect_model() -> str:
+    """Détecte le modèle chargé dans koboldcpp via /api/v1/model."""
+    global _model_cache
+    if _model_cache is not None:
+        return _model_cache
+    try:
+        req = urllib.request.Request(BASE_URL + "/api/v1/model")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            body = json.loads(resp.read().decode("utf-8", errors="replace"))
+        _model_cache = body.get("result", "")
+        if not _model_cache:
+            raise KoboldCppUnavailable("koboldcpp n'a pas retourné de nom de modèle.")
+        return _model_cache
+    except urllib.error.URLError as e:
+        raise KoboldCppUnavailable(
+            f"koboldcpp injoignable sur {BASE_URL}. Lance koboldcpp avec --api. Détail: {e}"
+        ) from e
+
+
 def _extract_json(text: str) -> dict[str, Any]:
     text = (text or "").strip()
     if not text:
         raise RuntimeError("Réponse koboldcpp vide")
     try:
         parsed = json.loads(text)
-        # Certains modèles wrappent le JSON dans un tableau [{}]
         if isinstance(parsed, list) and len(parsed) == 1 and isinstance(parsed[0], dict):
             return parsed[0]
         if isinstance(parsed, dict):
@@ -101,15 +114,10 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
     if not phrase or not phrase.strip():
         raise ValueError("phrase vide")
 
-    if not MODEL:
-        raise KoboldCppUnavailable(
-            "VOLTAIRE_KOBOLDCPP_MODEL n'est pas défini. "
-            "Définis le nom du modèle chargé dans koboldcpp."
-        )
-
+    model = _detect_model()
     endpoint = BASE_URL + "/v1/chat/completions"
     payload = {
-        "model": MODEL,
+        "model": model,
         "temperature": 0.0,
         "top_p": 1.0,
         "max_tokens": 220,
@@ -124,8 +132,6 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
-    if API_KEY:
-        headers["Authorization"] = "Bearer " + API_KEY
 
     req = urllib.request.Request(
         endpoint,
@@ -142,7 +148,7 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
     except urllib.error.URLError as e:
         raise KoboldCppUnavailable(
             f"koboldcpp injoignable sur {BASE_URL}. "
-            "Lance koboldcpp (flag --api), puis configure VOLTAIRE_KOBOLDCPP_BASE_URL. "
+            "Lance koboldcpp (flag --api). "
             f"Détail: {e}"
         ) from e
 

@@ -36,23 +36,19 @@ Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le 
 
 1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
 2. **Télécharge un modèle GGUF** — [`gemma-4-E2B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF/resolve/main/gemma-4-E2B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~3 Go RAM)
-3. **Lance koboldcpp** avec le flag `--api` :
+3. **Lance koboldcpp** :
 
 ```bat
 koboldcpp.exe --model gemma-4-E2B-it-UD-Q4_K_XL.gguf --port 5001 --api --usecublas
 ```
 
-4. **Configure** : copie `koboldcpp_config.example.cmd` vers `koboldcpp_config.cmd` et mets le nom du modèle :
-
-```bat
-set VOLTAIRE_KOBOLDCPP_MODEL=gemma-4-E2B-it-UD-Q4_K_XL
-```
-
-5. **Lance le backend** :
+4. **Lance le backend** (le modèle est auto-détecté, rien à configurer) :
 
 ```bat
 Backend_Reverso\start_backend.cmd
 ```
+
+Si koboldcpp tourne sur un autre port, copie `koboldcpp_config.example.cmd` en `koboldcpp_config.cmd` et change le port.
 
 ### Option 2 — Reverso (API web, zéro setup)
 
@@ -103,9 +99,7 @@ Tout se passe par variables d'environnement :
 | Variable | Défaut | Description |
 |----------|--------|-------------|
 | `VOLTAIRE_CORRECTOR` | `koboldcpp` | `koboldcpp` ou `reverso` |
-| `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp |
-| `VOLTAIRE_KOBOLDCPP_MODEL` | *(vide)* | Nom du modèle chargé dans koboldcpp |
-| `VOLTAIRE_KOBOLDCPP_API_KEY` | *(vide)* | Clé API si configurée |
+| `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp (le seul truc à changer si besoin) |
 | `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP en secondes |
 
 ---

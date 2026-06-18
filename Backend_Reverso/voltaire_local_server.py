@@ -138,7 +138,10 @@ class Handler(BaseHTTPRequestHandler):
             }
             if CORRECTOR == "koboldcpp":
                 info["koboldcpp_base_url"] = vk.BASE_URL
-                info["model"] = vk.MODEL
+                try:
+                    info["model"] = vk._detect_model()
+                except Exception:
+                    info["model"] = "(indétectable — koboldcpp injoignable ?)"
             self.send_json(200, info)
         else:
             self.send_json(404, {"ok": False, "error": "not_found"})
@@ -184,7 +187,11 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  Corrector: {CORRECTOR}")
     if CORRECTOR == "koboldcpp":
         print(f"  koboldcpp : {vk.BASE_URL}")
-        print(f"  Model     : {vk.MODEL or '(non défini — configure VOLTAIRE_KOBOLDCPP_MODEL)'}")
+        try:
+            model = vk._detect_model()
+            print(f"  Model     : {model}")
+        except Exception:
+            print("  Model     : (indétectable — koboldcpp lancé ?)")
     print("  Endpoint  : POST /check {text: ..., phrase: ...}")
     print("Laisse cette fenêtre ouverte. Ctrl+C pour arrêter.")
     try:

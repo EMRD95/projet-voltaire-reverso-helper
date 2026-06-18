@@ -21,11 +21,11 @@ class FakeResponse:
 
 class KoboldCppClientTests(unittest.TestCase):
     def setUp(self):
-        self._model_patcher = patch("voltaire_koboldcpp.MODEL", "test-model")
-        self._model_patcher.start()
+        self._detect_patcher = patch("voltaire_koboldcpp._detect_model", return_value="test-model")
+        self._detect_patcher.start()
 
     def tearDown(self):
-        self._model_patcher.stop()
+        self._detect_patcher.stop()
 
     def test_analyze_phrase_parses_strict_json(self):
         outer = {
@@ -44,14 +44,13 @@ class KoboldCppClientTests(unittest.TestCase):
             captured["auth"] = req.headers.get("Authorization")
             return FakeResponse(outer)
 
-        with patch("urllib.request.urlopen", fake_urlopen), \
-             patch("voltaire_koboldcpp.API_KEY", "***"):
+        with patch("urllib.request.urlopen", fake_urlopen):
             result = vk.analyze_phrase("Je sui content de te voire demain.")
 
         self.assertTrue(result["has_error"])
         self.assertEqual(result["corrected"], "Je suis content de te voir demain.")
         self.assertEqual(result["error_span"], "sui / voire")
-        self.assertEqual(captured["auth"], "Bearer ***")
+        self.assertIsNone(captured["auth"])
         self.assertEqual(captured["payload"]["model"], "test-model")
 
     def test_analyze_phrase_handles_array_wrapped_json(self):
@@ -76,10 +75,17 @@ class KoboldCppClientTests(unittest.TestCase):
         self.assertFalse(result["has_error"])
         self.assertEqual(result["corrected"], "Il est venu hier.")
 
-    def test_missing_model_raises(self):
-        with patch("voltaire_koboldcpp.MODEL", ""):
-            with self.assertRaises(vk.KoboldCppUnavailable):
-                vk.analyze_phrase("test")
+    def test_detect_model_returns_from_api(self):
+        self._detect_patcher.stop()
+        try:
+            with patch("voltaire_koboldcpp._model_cache", None):
+                def fake_urlopen(req, timeout=0):
+                    return FakeResponse({"result": "my-model.gguf"})
+                with patch("urllib.request.urlopen", fake_urlopen):
+                    result = vk._detect_model()
+                self.assertEqual(result, "my-model.gguf")
+        finally:
+            self._detect_patcher.start()
 
 
 if __name__ == "__main__":
