@@ -35,7 +35,7 @@ Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le 
 ### Option 1 — koboldcpp (LLM local, recommandé)
 
 1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
-2. **Télécharge un modèle GGUF** — [gemma-4-E2B-it-GGUF](https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF/tree/main) recommandé (tourne sur un potato PC, ~2-4 Go RAM)
+2. **Télécharge un modèle GGUF** — [`gemma-4-E2B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF/resolve/main/gemma-4-E2B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~3 Go RAM)
 3. **Lance koboldcpp** avec le flag `--api` :
 
 ```bat

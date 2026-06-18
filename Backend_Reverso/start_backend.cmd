@@ -19,6 +19,8 @@ echo   Modele   : %VOLTAIRE_KOBOLDCPP_MODEL%
 echo.
 if "%VOLTAIRE_KOBOLDCPP_MODEL%"=="" (
     echo   ⚠  VOLTAIRE_KOBOLDCPP_MODEL non defini !
+    echo   Modele recommande : gemma-4-E2B-it-UD-Q4_K_XL.gguf
+    echo   (tourne sur un PC portable, ~3 Go RAM)
     echo   Cree koboldcpp_config.cmd ou definis la variable.
     echo.
 )
