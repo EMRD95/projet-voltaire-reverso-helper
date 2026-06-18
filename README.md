@@ -57,8 +57,7 @@ Backend_Reverso\start_backend.cmd
 ### Option 2 — Reverso (API web, zéro setup)
 
 ```bat
-set VOLTAIRE_CORRECTOR=reverso
-Backend_Reverso\start_backend.cmd
+Backend_Reverso\start_reverso.cmd
 ```
 
 Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
@@ -80,7 +79,8 @@ Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité 
 │   ├── voltaire_local_server.py      # Serveur HTTP CORS (dual backend)
 │   ├── voltaire_check.py             # Extracteur de phrase + client Reverso
 │   ├── voltaire_koboldcpp.py         # Client koboldcpp (API OpenAI-compatible)
-│   ├── start_backend.cmd             # Lancement Windows
+│   ├── start_backend.cmd               # Lancement koboldcpp
+│   ├── start_reverso.cmd                # Lancement Reverso
 │   ├── koboldcpp_config.example.cmd  # Exemple config koboldcpp
 │   ├── test_voltaire_check.py
 │   ├── test_voltaire_koboldcpp.py
