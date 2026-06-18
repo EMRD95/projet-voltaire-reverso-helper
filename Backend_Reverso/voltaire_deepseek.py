@@ -115,6 +115,7 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
             {"role": "user", "content": "Phrase à analyser:\n" + phrase},
         ],
         "response_format": {"type": "json_object"},
+        "thinking": {"type": "disabled"},   # pas besoin de reasoning pour de la correction
     }
     headers = {
         "Content-Type": "application/json",
