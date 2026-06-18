@@ -51,7 +51,7 @@ class DeepSeekClientTests(unittest.TestCase):
         self.assertEqual(result["corrected"], "Je suis content de te voir demain.")
         self.assertEqual(result["error_span"], "sui / voire")
         self.assertEqual(captured["auth"], "Bearer sk-test-key")
-        self.assertEqual(captured["payload"]["model"], "deepseek-chat")
+        self.assertEqual(captured["payload"]["model"], "deepseek-v4-flash")
 
     def test_analyze_phrase_handles_array_wrapped_json(self):
         outer = {

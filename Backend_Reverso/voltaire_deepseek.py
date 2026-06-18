@@ -22,7 +22,7 @@ from typing import Any
 
 BASE_URL = os.environ.get("VOLTAIRE_DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 API_KEY = os.environ.get("VOLTAIRE_DEEPSEEK_API_KEY", "").strip()
-MODEL = os.environ.get("VOLTAIRE_DEEPSEEK_MODEL", "deepseek-chat").strip() or "deepseek-chat"
+MODEL = os.environ.get("VOLTAIRE_DEEPSEEK_MODEL", "deepseek-v4-flash").strip() or "deepseek-v4-flash"
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_DEEPSEEK_TIMEOUT", "90"))
 
 SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.

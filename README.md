@@ -121,7 +121,7 @@ Tout se passe par variables d'environnement :
 | `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp |
 | `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP koboldcpp |
 | `VOLTAIRE_DEEPSEEK_API_KEY` | *(vide)* | Clé API DeepSeek |
-| `VOLTAIRE_DEEPSEEK_MODEL` | `deepseek-chat` | Modèle DeepSeek |
+| `VOLTAIRE_DEEPSEEK_MODEL` | `deepseek-v4-flash` | Modèle DeepSeek |
 | `VOLTAIRE_DEEPSEEK_TIMEOUT` | `90` | Timeout HTTP DeepSeek |
 
 ---
