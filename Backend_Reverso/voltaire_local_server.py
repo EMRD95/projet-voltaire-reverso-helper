@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Serveur local pour le userscript Projet Voltaire.
 
-Deux backends au choix (configurable via VOLTAIRE_CORRECTOR) :
+Trois backends au choix (configurable via VOLTAIRE_CORRECTOR) :
 
   reverso    → API Reverso (web, gratuit, parfois rate-limité)
-  koboldcpp  → API koboldcpp locale (OpenAI-compatible, modèle au choix)
+  koboldcpp  → API koboldcpp locale (modèle GGUF au choix)
+  deepseek   → API DeepSeek (cloud, nécessite une clé API)
 
 Flux : page → serveur local :8765 → backend → panneau flottant
 """
@@ -21,15 +22,17 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 import voltaire_check as vc
+import voltaire_deepseek as vd
 import voltaire_koboldcpp as vk
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
 CACHE_TTL_SECONDS = 900.0
 
+VALID_CORRECTORS = ("reverso", "koboldcpp", "deepseek")
 CORRECTOR = os.environ.get("VOLTAIRE_CORRECTOR", "koboldcpp").strip().lower()
-if CORRECTOR not in ("reverso", "koboldcpp"):
-    print(f"VOLTAIRE_CORRECTOR={CORRECTOR!r} invalide. Valeurs: reverso, koboldcpp. Utilisation de koboldcpp.")
+if CORRECTOR not in VALID_CORRECTORS:
+    print(f"VOLTAIRE_CORRECTOR={CORRECTOR!r} invalide. Valeurs: {', '.join(VALID_CORRECTORS)}. Utilisation de koboldcpp.")
     CORRECTOR = "koboldcpp"
 
 _cache_lock = threading.Lock()
@@ -64,6 +67,9 @@ def _cached_analysis(phrase: str) -> dict[str, Any]:
     if CORRECTOR == "reverso":
         llm = _call_reverso(phrase)
         provider = "reverso"
+    elif CORRECTOR == "deepseek":
+        llm = vd.analyze_phrase(phrase)
+        provider = "deepseek"
     else:
         llm = vk.analyze_phrase(phrase)
         provider = "koboldcpp"
@@ -142,6 +148,8 @@ class Handler(BaseHTTPRequestHandler):
                     info["model"] = vk._detect_model()
                 except Exception:
                     info["model"] = "(indétectable — koboldcpp injoignable ?)"
+            elif CORRECTOR == "deepseek":
+                info["deepseek_model"] = vd.MODEL
             self.send_json(200, info)
         else:
             self.send_json(404, {"ok": False, "error": "not_found"})
@@ -169,7 +177,7 @@ class Handler(BaseHTTPRequestHandler):
             message = str(e)
             print("Erreur pendant /check:")
             traceback.print_exc()
-            status = 503 if any(k in message.lower() for k in ("koboldcpp", "reverso")) else 500
+            status = 503 if any(k in message.lower() for k in ("koboldcpp", "reverso", "deepseek")) else 500
             self.send_json(status, {"ok": False, "error": "server_error", "message": message})
 
 
@@ -192,6 +200,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  Model     : {model}")
         except Exception:
             print("  Model     : (indétectable — koboldcpp lancé ?)")
+    elif CORRECTOR == "deepseek":
+        print(f"  DeepSeek  : {vd.BASE_URL}")
+        print(f"  Model     : {vd.MODEL}")
     print("  Endpoint  : POST /check {text: ..., phrase: ...}")
     print("Laisse cette fenêtre ouverte. Ctrl+C pour arrêter.")
     try:

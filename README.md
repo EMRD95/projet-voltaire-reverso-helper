@@ -12,12 +12,13 @@
 
 **Un assistant d'entraînement pour Projet Voltaire.** Le script ne clique pas à ta place, il affiche l'analyse pour t'aider à apprendre l'orthographe et la grammaire avant de soumettre ta réponse.
 
-Deux backends au choix :
+Trois backends au choix :
 
 | Backend | Type | Avantage | Inconvénient |
 |---------|------|----------|-------------|
 | **koboldcpp** | LLM local | Illimité, privé, rapide | Nécessite un modèle GGUF |
-| **Reverso** | API web | Zéro setup | Rate-limité, public |
+| **DeepSeek** | API cloud | Rapide, pas de GPU | Payant (clé API) |
+| **Reverso** | API web | Zéro setup, gratuit | Rate-limité, public |
 
 ---
 
@@ -26,7 +27,7 @@ Deux backends au choix :
 ```
 Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM)
                              ↓
-                  Backend local :8765 → koboldcpp ou Reverso
+                  Backend local :8765 → koboldcpp / DeepSeek / Reverso
                              ↓
                   Panneau flottant : résultat + correction
 ```
@@ -50,13 +51,27 @@ Backend_Reverso\start_backend_koboldcpp.cmd
 
 Si koboldcpp tourne sur un autre port, copie `koboldcpp_config.example.cmd` en `koboldcpp_config.cmd` et change le port.
 
-### Option 2 — Reverso (API web, zéro setup)
+### Option 2 — DeepSeek (API cloud)
+
+1. **Crée une clé API** sur https://platform.deepseek.com/api_keys
+2. **Configure** : copie `deepseek_config.example.cmd` en `deepseek_config.cmd` et mets ta clé :
+
+```bat
+set VOLTAIRE_DEEPSEEK_API_KEY=***   ```
+
+3. **Lance le backend** :
+
+```bat
+Backend_Reverso\start_backend_deepseek.cmd
+```
+
+### Option 3 — Reverso (API web, zéro setup)
 
 ```bat
 Backend_Reverso\start_backend_reverso.cmd
 ```
 
-Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
+Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
 
 ### Installer le userscript
 
@@ -72,14 +87,18 @@ Le backend appelle l'API publique de Reverso. Gratuit mais parfois rate-limité 
 
 ```text
 ├── Backend_Reverso/
-│   ├── voltaire_local_server.py      # Serveur HTTP CORS (dual backend)
-│   ├── voltaire_check.py             # Extracteur de phrase + client Reverso
-│   ├── voltaire_koboldcpp.py         # Client koboldcpp (API OpenAI-compatible)
-│   ├── start_backend_koboldcpp.cmd      # Lancement koboldcpp
-│   ├── start_backend_reverso.cmd        # Lancement Reverso
-│   ├── koboldcpp_config.example.cmd  # Exemple config koboldcpp
+│   ├── voltaire_local_server.py        # Serveur HTTP CORS (triple backend)
+│   ├── voltaire_check.py               # Extracteur de phrase + client Reverso
+│   ├── voltaire_koboldcpp.py           # Client koboldcpp
+│   ├── voltaire_deepseek.py            # Client DeepSeek
+│   ├── start_backend_koboldcpp.cmd     # Lancement koboldcpp
+│   ├── start_backend_deepseek.cmd      # Lancement DeepSeek
+│   ├── start_backend_reverso.cmd       # Lancement Reverso
+│   ├── koboldcpp_config.example.cmd    # Exemple config koboldcpp
+│   ├── deepseek_config.example.cmd     # Exemple config DeepSeek
 │   ├── test_voltaire_check.py
 │   ├── test_voltaire_koboldcpp.py
+│   ├── test_voltaire_deepseek.py
 │   └── test_voltaire_local_server.py
 ├── Tampermonkey/
 │   ├── tampermonkey_voltaire_helper.user.js
@@ -98,9 +117,12 @@ Tout se passe par variables d'environnement :
 
 | Variable | Défaut | Description |
 |----------|--------|-------------|
-| `VOLTAIRE_CORRECTOR` | `koboldcpp` | `koboldcpp` ou `reverso` |
-| `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp (le seul truc à changer si besoin) |
-| `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP en secondes |
+| `VOLTAIRE_CORRECTOR` | `koboldcpp` | `koboldcpp`, `deepseek` ou `reverso` |
+| `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp |
+| `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP koboldcpp |
+| `VOLTAIRE_DEEPSEEK_API_KEY` | *(vide)* | Clé API DeepSeek |
+| `VOLTAIRE_DEEPSEEK_MODEL` | `deepseek-chat` | Modèle DeepSeek |
+| `VOLTAIRE_DEEPSEEK_TIMEOUT` | `90` | Timeout HTTP DeepSeek |
 
 ---
 

@@ -2,3 +2,4 @@ Backend_Reverso/tools/
 Backend_Reverso/__pycache__/
 *.pyc
 Backend_Reverso/koboldcpp_config.cmd
+Backend_Reverso/deepseek_config.cmd
