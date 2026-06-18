@@ -6,7 +6,7 @@ Nécessite une clé API (https://platform.deepseek.com/api_keys).
 
 Configuration via variables d'environnement :
   VOLTAIRE_DEEPSEEK_API_KEY   Clé API DeepSeek (obligatoire)
-  VOLTAIRE_DEEPSEEK_BASE_URL  URL de base (défaut: https://api.deepseek.com/v1)
+  VOLTAIRE_DEEPSEEK_BASE_URL  URL de base (défaut: https://api.deepseek.com)
   VOLTAIRE_DEEPSEEK_MODEL     Modèle (défaut: deepseek-chat)
   VOLTAIRE_DEEPSEEK_TIMEOUT   Timeout HTTP en secondes (défaut: 90)
 """
@@ -20,7 +20,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-BASE_URL = os.environ.get("VOLTAIRE_DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
+BASE_URL = os.environ.get("VOLTAIRE_DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
 API_KEY = os.environ.get("VOLTAIRE_DEEPSEEK_API_KEY", "").strip()
 MODEL = os.environ.get("VOLTAIRE_DEEPSEEK_MODEL", "deepseek-v4-flash").strip() or "deepseek-v4-flash"
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_DEEPSEEK_TIMEOUT", "90"))
