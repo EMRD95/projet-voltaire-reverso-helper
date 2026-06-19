@@ -17,7 +17,7 @@ Trois backends au choix :
 | Backend | Type | Avantage | Inconvénient |
 |---------|------|----------|-------------|
 | **Reverso** | API web | Zéro setup, gratuit, simple, ~90 % fiable | Rate-limité (429), public ; pointe surtout l'erreur sans vraie explication |
-| **DeepSeek** | API cloud | Pas cher, plus précis avec `instructions.txt` ; affiche des explications | Clé API + crédit requis (~2 $) |
+| **DeepSeek** | API cloud | Le plus précis et le moins cher (même vs local) avec `instructions.txt` ; affiche des explications | Clé API + crédit requis (~1 $) |
 | **koboldcpp** | LLM local | Illimité, privé, rapide ; affiche des explications | Nécessite un bon PC + modèle GGUF |
 
 ---
@@ -50,10 +50,10 @@ Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux 
 
 ### Option 2 — DeepSeek v4 Pro Flash (API cloud)
 
-Plus précis que Reverso, surtout avec un `instructions.txt` bien calibré. Le modèle `deepseek-v4-flash` coûte très peu : **2 $ de crédit suffisent pour des dizaines d'heures** d'entraînement.
+C'est la **méthode la plus précise, la meilleure et la moins chère** — même comparé à un modèle local qui te coûtera plus cher en électricité. Le modèle `deepseek-v4-flash` coûte quasi rien : **1 $ de crédit suffit pour une centaine d'heures** d'entraînement.
 
 1. **Crée une clé API** sur https://platform.deepseek.com/api_keys
-2. **Mets quelques centimes** sur ton compte DeepSeek (2 $ suffisent large)
+2. **Mets 1 $** sur ton compte DeepSeek (ça suffit pour une centaine d'heures)
 3. **Configure** : copie `deepseek_config.example.cmd` en `deepseek_config.cmd` et mets ta clé :
 
 ```bat
