@@ -38,7 +38,7 @@ Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le 
 
 ## 🚀 Utilisation
 
-### Option 1 — Reverso (API web, recommandé)
+### Option 1, Reverso (API web, recommandé)
 
 ```bat
 Backend_Reverso\start_backend_reverso.cmd
@@ -46,11 +46,11 @@ Backend_Reverso\start_backend_reverso.cmd
 
 C'est le backend le plus simple : **zéro setup**, zéro clé API. Rapide et assez précis (~90 % des corrections sont bonnes). Si tu veux vraiment pas te prendre la tête, prends celui-là.
 
-Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
+Gratuit mais parfois rate-limité (erreur 429), attends ~1 minute entre deux vérifications.
 
-### Option 2 — DeepSeek v4 Pro Flash (API cloud)
+### Option 2, DeepSeek v4 Pro Flash (API cloud)
 
-C'est la **méthode la plus précise, la meilleure et la moins chère** — même comparé à un modèle local qui te coûtera plus cher en électricité. Le modèle `deepseek-v4-flash` coûte quasi rien : **1 $ de crédit suffit pour une centaine d'heures** d'entraînement.
+C'est la **méthode la plus précise, la meilleure et la moins chère**, même comparé à un modèle local qui te coûtera plus cher en électricité. Le modèle `deepseek-v4-flash` coûte quasi rien : **1 $ de crédit suffit pour une centaine d'heures** d'entraînement.
 
 1. **Crée une clé API** sur https://platform.deepseek.com/api_keys
 2. **Mets 1 $** sur ton compte DeepSeek (ça suffit pour une centaine d'heures)
@@ -66,12 +66,12 @@ set VOLTAIRE_DEEPSEEK_API_KEY=***
 Backend_Reverso\start_backend_deepseek.cmd
 ```
 
-### Option 3 — koboldcpp (LLM local)
+### Option 3, koboldcpp (LLM local)
 
 Si tu as **un bon PC** avec assez de RAM/VRAM, tu peux faire tourner un LLM local pour du zéro latence et 100 % privé.
 
 1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
-2. **Télécharge un modèle GGUF** — [`gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF/resolve/main/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~10 Go RAM)
+2. **Télécharge un modèle GGUF**, [`gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF/resolve/main/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~10 Go RAM)
 3. **Lance koboldcpp** avec le modèle de ton choix et l'API activée (flag `--api` en CLI, ou coche « Start Kobold API » dans le launcher)
 4. **Lance le backend** (le modèle est auto-détecté, rien à configurer) :
 
