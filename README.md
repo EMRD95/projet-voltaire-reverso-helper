@@ -126,8 +126,6 @@ Tu peux créer un fichier `Backend_Reverso/instructions.txt` pour donner des rè
 
 Le fichier est chargé automatiquement au démarrage et ajouté au prompt système. S'il est vide ou absent, le prompt par défaut s'applique.
 
-Ce fichier est dans le `.gitignore` : tes règles perso ne seront jamais commitées.
-
 ---
 
 ## ⚙️ Configuration
