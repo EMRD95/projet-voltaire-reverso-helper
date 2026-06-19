@@ -7,6 +7,9 @@ dans le launcher Windows). Le nom du modèle est auto-détecté via /api/v1/mode
 Configuration via variables d'environnement :
   VOLTAIRE_KOBOLDCPP_BASE_URL   URL de base koboldcpp (défaut: http://127.0.0.1:5001)
   VOLTAIRE_KOBOLDCPP_TIMEOUT    Timeout HTTP en secondes (défaut: 90)
+
+Un fichier instructions.txt dans le même dossier est automatiquement chargé
+et ajouté au prompt système (éditable par l'utilisateur).
 """
 
 from __future__ import annotations
@@ -16,6 +19,7 @@ import os
 import re
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any
 
 BASE_URL = os.environ.get("VOLTAIRE_KOBOLDCPP_BASE_URL", "http://127.0.0.1:5001").rstrip("/")
@@ -23,7 +27,7 @@ TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_KOBOLDCPP_TIMEOUT", "90"))
 
 _model_cache: str | None = None
 
-SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
+_BASE_SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
 Objectif: dire si la phrase contient une faute d'orthographe, grammaire, conjugaison ou accord.
 Ne juge pas le style. Ignore les variantes typographiques (apostrophe droite/courbe, espaces fines, guillemets).
 Ne réécris pas inutilement une phrase correcte.
@@ -42,6 +46,17 @@ Contraintes:
 - Si has_error=false, corrected doit être identique à la phrase reçue.
 - Ne propose jamais plusieurs options.
 """
+
+# Charge instructions.txt (éditable par l'utilisateur)
+_instructions_path = Path(__file__).resolve().parent / "instructions.txt"
+try:
+    _instructions = _instructions_path.read_text(encoding="utf-8").strip()
+    if _instructions:
+        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
+    else:
+        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
+except OSError:
+    SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
 
 
 class KoboldCppUnavailable(RuntimeError):

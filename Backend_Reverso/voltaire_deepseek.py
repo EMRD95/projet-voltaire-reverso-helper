@@ -7,8 +7,11 @@ Nécessite une clé API (https://platform.deepseek.com/api_keys).
 Configuration via variables d'environnement :
   VOLTAIRE_DEEPSEEK_API_KEY   Clé API DeepSeek (obligatoire)
   VOLTAIRE_DEEPSEEK_BASE_URL  URL de base (défaut: https://api.deepseek.com)
-  VOLTAIRE_DEEPSEEK_MODEL     Modèle (défaut: deepseek-chat)
+  VOLTAIRE_DEEPSEEK_MODEL     Modèle (défaut: deepseek-v4-flash)
   VOLTAIRE_DEEPSEEK_TIMEOUT   Timeout HTTP en secondes (défaut: 90)
+
+Un fichier instructions.txt dans le même dossier est automatiquement chargé
+et ajouté au prompt système (éditable par l'utilisateur).
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ import os
 import re
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any
 
 BASE_URL = os.environ.get("VOLTAIRE_DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/")
@@ -25,7 +29,7 @@ API_KEY = os.environ.get("VOLTAIRE_DEEPSEEK_API_KEY", "").strip()
 MODEL = os.environ.get("VOLTAIRE_DEEPSEEK_MODEL", "deepseek-v4-flash").strip() or "deepseek-v4-flash"
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_DEEPSEEK_TIMEOUT", "90"))
 
-SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
+_BASE_SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
 Objectif: dire si la phrase contient une faute d'orthographe, grammaire, conjugaison ou accord.
 Ne juge pas le style. Ignore les variantes typographiques (apostrophe droite/courbe, espaces fines, guillemets).
 Ne réécris pas inutilement une phrase correcte.
@@ -44,6 +48,17 @@ Contraintes:
 - Si has_error=false, corrected doit être identique à la phrase reçue.
 - Ne propose jamais plusieurs options.
 """
+
+# Charge instructions.txt (éditable par l'utilisateur)
+_instructions_path = Path(__file__).resolve().parent / "instructions.txt"
+try:
+    _instructions = _instructions_path.read_text(encoding="utf-8").strip()
+    if _instructions:
+        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
+    else:
+        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
+except OSError:
+    SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
 
 
 class DeepSeekUnavailable(RuntimeError):
@@ -93,7 +108,7 @@ def _normalize_result(phrase: str, obj: dict[str, Any]) -> dict[str, Any]:
 
 
 def analyze_phrase(phrase: str) -> dict[str, Any]:
-    """Appelle DeepSeek /v1/chat/completions et retourne un dict normalisé."""
+    """Appelle DeepSeek /chat/completions et retourne un dict normalisé."""
     if not phrase or not phrase.strip():
         raise ValueError("phrase vide")
 
@@ -115,7 +130,7 @@ def analyze_phrase(phrase: str) -> dict[str, Any]:
             {"role": "user", "content": "Phrase à analyser:\n" + phrase},
         ],
         "response_format": {"type": "json_object"},
-        "thinking": {"type": "disabled"},   # pas besoin de reasoning pour de la correction
+        "thinking": {"type": "disabled"},
     }
     headers = {
         "Content-Type": "application/json",
