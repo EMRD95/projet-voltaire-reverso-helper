@@ -154,6 +154,16 @@ CI GitHub Actions : ![CI](https://github.com/EMRD95/projet-voltaire-reverso-help
 
 ---
 
+## ⚖️ Mention légale
+
+Ce projet est un outil tiers indépendant, fourni à des fins exclusivement personnelles, pédagogiques et expérimentales. Il vise à permettre à son utilisateur de personnaliser son environnement numérique et de s'approprier ses outils d'apprentissage pour une expérience plus immersive de l'orthographe et de la grammaire.
+
+Ce projet n'est ni affilié à Projet Voltaire, ni soutenu, validé, autorisé ou approuvé par Projet Voltaire ou par ses sociétés, ayants droit, représentants, partenaires ou affiliés. Projet Voltaire est une marque, un service et une société distincts appartenant à leurs titulaires respectifs. Toute référence à Projet Voltaire est uniquement descriptive et sert à identifier le contexte d'utilisation de cet outil tiers.
+
+L'utilisation de ce projet relève de la seule responsabilité de l'utilisateur, dans le respect des conditions d'utilisation des services tiers concernés.
+
+---
+
 ## 📄 Licence
 
 MIT
