@@ -656,22 +656,72 @@ Exemples :
 
 ---
 
-## 32. Couleurs : « des étiquettes bleu clair », « des stylos orange »
+## 32. Couleurs : « des manteaux jaune citron », « des murs blanc cassé »
 
-Règles :
+Source vérifiée : Projet Voltaire, fiches « des nuages blanc ou des nuages blancs ? », « des tuniques bleu foncé ou bleues foncées ? » et article « Adjectifs de couleur : comment les accorder sans douleur ? ».
 
-- Les adjectifs de couleur simples s'accordent : des robes **bleues**.
-- Les couleurs composées restent invariables : des étiquettes **bleu clair**.
-- Les couleurs tirées d'un nom d'objet, de fruit, de matière ou de chose restent souvent invariables : des stylos **orange**, des chaussures **marron**.
+Règles prioritaires :
 
-Exemples :
+1. Les adjectifs de couleur simples s'accordent en genre et en nombre avec le nom.
+   - des nuages **blancs** ;
+   - des robes **bleues** ;
+   - des chemises **blanches** ;
+   - des questionnaires **jaunes** ;
+   - des fauteuils **violets** ;
+   - des espaces **verts**.
 
-- Des étiquettes **bleu clair**.
-- Des stylos **orange**.
-- Des chaussures **marron**.
-- Des robes **vertes**.
+2. Quand deux mots désignent ensemble une seule couleur, l'ensemble est un adjectif de couleur composé : aucun des deux mots ne varie.
+   - des étiquettes **bleu clair** ;
+   - des tuniques **bleu foncé** ;
+   - des voitures **bleu pâle** ;
+   - des lèvres **rouge vif** ;
+   - des rideaux **vert pomme** ;
+   - des manteaux **jaune citron** ;
+   - des murs **blanc cassé** ;
+   - des tapisseries **bleu ciel** ;
+   - des cravates **rouge foncé**.
 
-Attention : quelques noms devenus adjectifs s'accordent dans l'usage, comme **rose**, **mauve**, **pourpre**, **écarlate**.
+3. Ne pas ajouter de pluriel dans les couleurs composées, même si le nom est pluriel.
+   - Faux : des manteaux **jaunes citrons**.
+   - Correct : des manteaux **jaune citron**.
+   - Faux : des murs **blancs cassés**.
+   - Correct : des murs **blanc cassé**.
+   - Faux : des joues **rouges sang**.
+   - Correct : des joues **rouge sang**.
+
+4. Trait d'union : si les deux mots sont deux adjectifs de couleur, on les relie par un trait d'union ; l'ensemble reste invariable.
+   - des yeux **gris-bleu** ;
+   - une mer **bleu-vert** ;
+   - des havresacs **violet-pourpre**.
+
+5. Pas de trait d'union quand le second mot est un nom qui précise la nuance.
+   - **jaune citron**, pas **jaune-citron** : « citron » est un nom.
+   - **vert pomme**, pas **vert-pomme** : « pomme » est un nom.
+   - **rouge sang**, pas **rouge-sang** : « sang » est un nom.
+   - **gris ardoise**, pas **gris-ardoise** : « ardoise » est un nom.
+
+6. Les adjectifs de couleur issus d'un nom commun restent généralement invariables : fruit, fleur, arbre, matière, animal, chose.
+   - des stylos **orange** ;
+   - des chaussures **marron** ;
+   - des robes **fuchsia** ;
+   - des cheveux **acajou** ;
+   - des bijoux **or** ;
+   - des reflets **argent** ;
+   - des chemisiers **crème** ;
+   - des vestes **marine** ;
+   - des murs **moutarde** ;
+   - des tissus **saumon**, **grenat**, **turquoise**, **indigo**, **corail**.
+
+7. Exceptions : certains noms devenus adjectifs s'accordent dans l'usage.
+   - des layettes **roses** ;
+   - des fleurs **pourpres** ;
+   - des rideaux **mauves** ;
+   - des sacs **fauves** ;
+   - des joues **écarlates** ;
+   - des velours **incarnats** ;
+   - des lèvres **vermeilles**.
+
+Attention contexte : la règle d'invariabilité ci-dessus concerne les adjectifs de couleur. Si la couleur est employée comme nom, elle peut prendre le pluriel : les **bleus foncés** d'un peintre, les **gris clairs** d'un tableau. Les noms composés avec trait d'union restent souvent invariables : les **bleu-vert** du ciel.
 
 ---
 
