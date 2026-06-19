@@ -16,9 +16,9 @@ Trois backends au choix :
 
 | Backend | Type | Avantage | Inconvénient |
 |---------|------|----------|-------------|
-| **koboldcpp** | LLM local | Illimité, privé, rapide | Nécessite un modèle GGUF |
-| **DeepSeek** | API cloud | Rapide, pas de GPU | Payant (clé API) |
-| **Reverso** | API web | Zéro setup, gratuit | Rate-limité, public |
+| **Reverso** | API web | Zéro setup, gratuit, simple, ~90 % fiable | Rate-limité (429), public |
+| **DeepSeek** | API cloud | Pas cher, plus précis avec `instructions.txt` | Clé API + crédit requis (~2 $) |
+| **koboldcpp** | LLM local | Illimité, privé, rapide | Nécessite un bon PC + modèle GGUF |
 
 ---
 
@@ -27,7 +27,7 @@ Trois backends au choix :
 ```
 Page Projet Voltaire → Tampermonkey (extrait la phrase du DOM)
                              ↓
-                  Backend local :8765 → koboldcpp / DeepSeek / Reverso
+                  Backend local :8765 → Reverso / DeepSeek / koboldcpp
                              ↓
                   Panneau flottant : résultat + correction
 ```
@@ -38,7 +38,37 @@ Le backend écoute sur `localhost:8765` et expose un endpoint `POST /check`. Le 
 
 ## 🚀 Utilisation
 
-### Option 1 — koboldcpp (LLM local, recommandé)
+### Option 1 — Reverso (API web, recommandé)
+
+```bat
+Backend_Reverso\start_backend_reverso.cmd
+```
+
+C'est le backend le plus simple : **zéro setup**, zéro clé API. Rapide et assez précis (~90 % des corrections sont bonnes). Si tu veux vraiment pas te prendre la tête, prends celui-là.
+
+Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
+
+### Option 2 — DeepSeek v4 Pro Flash (API cloud)
+
+Plus précis que Reverso, surtout avec un `instructions.txt` bien calibré. Le modèle `deepseek-v4-flash` coûte très peu : **2 $ de crédit suffisent pour des dizaines d'heures** d'entraînement.
+
+1. **Crée une clé API** sur https://platform.deepseek.com/api_keys
+2. **Mets quelques centimes** sur ton compte DeepSeek (2 $ suffisent large)
+3. **Configure** : copie `deepseek_config.example.cmd` en `deepseek_config.cmd` et mets ta clé :
+
+```bat
+set VOLTAIRE_DEEPSEEK_API_KEY=***
+```
+
+4. **Lance le backend** :
+
+```bat
+Backend_Reverso\start_backend_deepseek.cmd
+```
+
+### Option 3 — koboldcpp (LLM local)
+
+Si tu as **un bon PC** avec assez de RAM/VRAM, tu peux faire tourner un LLM local pour du zéro latence et 100 % privé.
 
 1. **Télécharge [koboldcpp](https://github.com/LostRuins/koboldcpp/releases)**
 2. **Télécharge un modèle GGUF** — [`gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf`](https://huggingface.co/unsloth/gemma-4-26B-A4B-it-GGUF/resolve/main/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf) recommandé (tourne sur un PC portable, ~10 Go RAM)
@@ -50,28 +80,6 @@ Backend_Reverso\start_backend_koboldcpp.cmd
 ```
 
 Si koboldcpp tourne sur un autre port, copie `koboldcpp_config.example.cmd` en `koboldcpp_config.cmd` et change le port.
-
-### Option 2 — DeepSeek (API cloud)
-
-1. **Crée une clé API** sur https://platform.deepseek.com/api_keys
-2. **Configure** : copie `deepseek_config.example.cmd` en `deepseek_config.cmd` et mets ta clé :
-
-```bat
-set VOLTAIRE_DEEPSEEK_API_KEY=***   ```
-
-3. **Lance le backend** :
-
-```bat
-Backend_Reverso\start_backend_deepseek.cmd
-```
-
-### Option 3 — Reverso (API web, zéro setup)
-
-```bat
-Backend_Reverso\start_backend_reverso.cmd
-```
-
-Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux vérifications.
 
 ### Installer le userscript
 
@@ -128,7 +136,7 @@ Tout se passe par variables d'environnement :
 
 | Variable | Défaut | Description |
 |----------|--------|-------------|
-| `VOLTAIRE_CORRECTOR` | `koboldcpp` | `koboldcpp`, `deepseek` ou `reverso` |
+| `VOLTAIRE_CORRECTOR` | `reverso` | `reverso`, `deepseek` ou `koboldcpp` |
 | `VOLTAIRE_KOBOLDCPP_BASE_URL` | `http://127.0.0.1:5001` | URL de l'API koboldcpp |
 | `VOLTAIRE_KOBOLDCPP_TIMEOUT` | `90` | Timeout HTTP koboldcpp |
 | `VOLTAIRE_DEEPSEEK_API_KEY` | *(vide)* | Clé API DeepSeek |
