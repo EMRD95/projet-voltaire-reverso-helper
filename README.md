@@ -96,6 +96,7 @@ Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux 
 │   ├── start_backend_reverso.cmd       # Lancement Reverso
 │   ├── koboldcpp_config.example.cmd    # Exemple config koboldcpp
 │   ├── deepseek_config.example.cmd     # Exemple config DeepSeek
+│   ├── instructions.txt                # Règles de correction personnalisées
 │   ├── test_voltaire_check.py
 │   ├── test_voltaire_koboldcpp.py
 │   ├── test_voltaire_deepseek.py
@@ -108,6 +109,16 @@ Gratuit mais parfois rate-limité (erreur 429) — attends ~1 minute entre deux 
 ├── Screenshots/
 └── .github/workflows/backend-tests.yml
 ```
+
+---
+
+## 📝 Règles personnalisées (`instructions.txt`)
+
+Tu peux créer un fichier `Backend_Reverso/instructions.txt` pour donner des règles de correction spécifiques aux LLMs (koboldcpp et DeepSeek). Par exemple, si tu as du mal avec les participes passés ou les accords du participe, écris tes règles dedans et le LLM les appliquera en priorité.
+
+Le fichier est chargé automatiquement au démarrage et ajouté au prompt système. S'il est vide ou absent, le prompt par défaut s'applique.
+
+Ce fichier est dans le `.gitignore` : tes règles perso ne seront jamais commitées.
 
 ---
 
