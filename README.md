@@ -16,9 +16,9 @@ Trois backends au choix :
 
 | Backend | Type | Avantage | Inconvénient |
 |---------|------|----------|-------------|
-| **Reverso** | API web | Zéro setup, gratuit, simple, ~90 % fiable | Rate-limité (429), public |
-| **DeepSeek** | API cloud | Pas cher, plus précis avec `instructions.txt` | Clé API + crédit requis (~2 $) |
-| **koboldcpp** | LLM local | Illimité, privé, rapide | Nécessite un bon PC + modèle GGUF |
+| **Reverso** | API web | Zéro setup, gratuit, simple, ~90 % fiable | Rate-limité (429), public ; pointe surtout l'erreur sans vraie explication |
+| **DeepSeek** | API cloud | Pas cher, plus précis avec `instructions.txt` ; affiche des explications | Clé API + crédit requis (~2 $) |
+| **koboldcpp** | LLM local | Illimité, privé, rapide ; affiche des explications | Nécessite un bon PC + modèle GGUF |
 
 ---
 
