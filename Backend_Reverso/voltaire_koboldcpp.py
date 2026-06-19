@@ -5,11 +5,12 @@ koboldcpp expose une API OpenAI-compatible (flag --api ou « Start Kobold API »
 dans le launcher Windows). Le nom du modèle est auto-détecté via /api/v1/model.
 
 Configuration via variables d'environnement :
-  VOLTAIRE_KOBOLDCPP_BASE_URL   URL de base koboldcpp (défaut: http://127.0.0.1:5001)
-  VOLTAIRE_KOBOLDCPP_TIMEOUT    Timeout HTTP en secondes (défaut: 90)
+  VOLTAIRE_KOBOLDCPP_BASE_URL          URL de base koboldcpp (défaut: http://127.0.0.1:5001)
+  VOLTAIRE_KOBOLDCPP_TIMEOUT           Timeout HTTP en secondes (défaut: 90)
+  VOLTAIRE_KOBOLDCPP_USE_INSTRUCTIONS  Charge instructions.txt (défaut: 0)
 
-Un fichier instructions.txt dans le même dossier est automatiquement chargé
-et ajouté au prompt système (éditable par l'utilisateur).
+Par défaut, instructions.txt n'est pas utilisé avec koboldcpp pour éviter un prompt trop lourd.
+Mettre VOLTAIRE_KOBOLDCPP_USE_INSTRUCTIONS=1 pour l'ajouter au prompt système.
 """
 
 from __future__ import annotations
@@ -24,6 +25,13 @@ from typing import Any
 
 BASE_URL = os.environ.get("VOLTAIRE_KOBOLDCPP_BASE_URL", "http://127.0.0.1:5001").rstrip("/")
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_KOBOLDCPP_TIMEOUT", "90"))
+USE_INSTRUCTIONS = os.environ.get("VOLTAIRE_KOBOLDCPP_USE_INSTRUCTIONS", "0").strip().lower() in {
+    "1",
+    "true",
+    "yes",
+    "oui",
+    "on",
+}
 
 _model_cache: str | None = None
 
@@ -47,15 +55,18 @@ Contraintes:
 - Ne propose jamais plusieurs options.
 """
 
-# Charge instructions.txt (éditable par l'utilisateur)
+# Charge instructions.txt (éditable par l'utilisateur) seulement si la config l'active.
 _instructions_path = Path(__file__).resolve().parent / "instructions.txt"
-try:
-    _instructions = _instructions_path.read_text(encoding="utf-8").strip()
-    if _instructions:
-        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
-    else:
+if USE_INSTRUCTIONS:
+    try:
+        _instructions = _instructions_path.read_text(encoding="utf-8").strip()
+        if _instructions:
+            SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
+        else:
+            SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
+    except OSError:
         SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
-except OSError:
+else:
     SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
 
 

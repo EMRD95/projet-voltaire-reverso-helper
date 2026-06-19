@@ -4,3 +4,5 @@ rem Cree une cle sur https://platform.deepseek.com/api_keys
 
 set VOLTAIRE_DEEPSEEK_API_KEY=sk-...
 set VOLTAIRE_DEEPSEEK_MODEL=deepseek-v4-flash
+rem 1 = ajoute instructions.txt au prompt DeepSeek (defaut), 0 = ne pas l'utiliser
+set VOLTAIRE_DEEPSEEK_USE_INSTRUCTIONS=1

@@ -12,6 +12,7 @@ echo   Voltaire Helper - koboldcpp
 echo ========================================
 echo   koboldcpp: %VOLTAIRE_KOBOLDCPP_BASE_URL%
 echo   Modele   : auto-detecte via l'API koboldcpp
+echo   instructions.txt: %VOLTAIRE_KOBOLDCPP_USE_INSTRUCTIONS%
 echo.
 echo   Lance koboldcpp avec --api avant ce script.
 echo.

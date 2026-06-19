@@ -5,13 +5,14 @@ DeepSeek expose une API OpenAI-compatible à https://api.deepseek.com.
 Nécessite une clé API (https://platform.deepseek.com/api_keys).
 
 Configuration via variables d'environnement :
-  VOLTAIRE_DEEPSEEK_API_KEY   Clé API DeepSeek (obligatoire)
-  VOLTAIRE_DEEPSEEK_BASE_URL  URL de base (défaut: https://api.deepseek.com)
-  VOLTAIRE_DEEPSEEK_MODEL     Modèle (défaut: deepseek-v4-flash)
-  VOLTAIRE_DEEPSEEK_TIMEOUT   Timeout HTTP en secondes (défaut: 90)
+  VOLTAIRE_DEEPSEEK_API_KEY           Clé API DeepSeek (obligatoire)
+  VOLTAIRE_DEEPSEEK_BASE_URL          URL de base (défaut: https://api.deepseek.com)
+  VOLTAIRE_DEEPSEEK_MODEL             Modèle (défaut: deepseek-v4-flash)
+  VOLTAIRE_DEEPSEEK_TIMEOUT           Timeout HTTP en secondes (défaut: 90)
+  VOLTAIRE_DEEPSEEK_USE_INSTRUCTIONS  Charge instructions.txt (défaut: 1)
 
-Un fichier instructions.txt dans le même dossier est automatiquement chargé
-et ajouté au prompt système (éditable par l'utilisateur).
+Par défaut, instructions.txt est chargé et ajouté au prompt système.
+Mettre VOLTAIRE_DEEPSEEK_USE_INSTRUCTIONS=0 pour le désactiver.
 """
 
 from __future__ import annotations
@@ -28,6 +29,13 @@ BASE_URL = os.environ.get("VOLTAIRE_DEEPSEEK_BASE_URL", "https://api.deepseek.co
 API_KEY = os.environ.get("VOLTAIRE_DEEPSEEK_API_KEY", "").strip()
 MODEL = os.environ.get("VOLTAIRE_DEEPSEEK_MODEL", "deepseek-v4-flash").strip() or "deepseek-v4-flash"
 TIMEOUT_SECONDS = int(os.environ.get("VOLTAIRE_DEEPSEEK_TIMEOUT", "90"))
+USE_INSTRUCTIONS = os.environ.get("VOLTAIRE_DEEPSEEK_USE_INSTRUCTIONS", "1").strip().lower() not in {
+    "0",
+    "false",
+    "no",
+    "non",
+    "off",
+}
 
 _BASE_SYSTEM_PROMPT = """Tu es un correcteur orthographique et grammatical expert en français.
 Objectif: dire si la phrase contient une faute d'orthographe, grammaire, conjugaison ou accord.
@@ -49,15 +57,18 @@ Contraintes:
 - Ne propose jamais plusieurs options.
 """
 
-# Charge instructions.txt (éditable par l'utilisateur)
+# Charge instructions.txt (éditable par l'utilisateur) si la config l'active.
 _instructions_path = Path(__file__).resolve().parent / "instructions.txt"
-try:
-    _instructions = _instructions_path.read_text(encoding="utf-8").strip()
-    if _instructions:
-        SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
-    else:
+if USE_INSTRUCTIONS:
+    try:
+        _instructions = _instructions_path.read_text(encoding="utf-8").strip()
+        if _instructions:
+            SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT + "\n\nRègles supplémentaires de l'utilisateur :\n" + _instructions
+        else:
+            SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
+    except OSError:
         SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
-except OSError:
+else:
     SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
 
 
