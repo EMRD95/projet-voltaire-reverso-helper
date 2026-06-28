@@ -100,26 +100,48 @@ Erreur fréquente :
 
 ---
 
-## 4. Futur ou conditionnel : « je ferai » ou « je ferais »
+## 4. Futur ou conditionnel : « je vérifierai », « je vérifierais », « je conclurai », « je conclurais »
 
-- **je ferai**, **je vérifierai**, **je conclurai** : futur simple, action certaine, prévue ou annoncée.
-- **je ferais**, **je vérifierais**, **je conclurais** : conditionnel présent, hypothèse, politesse, souhait ou action soumise à condition.
+Sources vérifiées : Projet Voltaire, fiche « Je concluerai ou je conclurai ? Je concluerais ou je conclurais ? La conjugaison de conclure » + règle générale futur/conditionnel.
 
-Test avec « nous » :
+Il y a **deux vérifications obligatoires** :
 
-- je **ferai** → nous **ferons**.
-- je **ferais** → nous **ferions**.
-- je **vérifierai** → nous **vérifierons**.
-- je **vérifierais** → nous **vérifierions**.
-- je **conclurai** → nous **conclurons**.
-- je **conclurais** → nous **conclurions**.
+1. **Choisir le temps : futur en -ai ou conditionnel en -ais.**
+   - **je vérifierai**, **je conclurai**, **je ferai** : futur simple → action certaine, prévue, annoncée.
+   - **je vérifierais**, **je conclurais**, **je ferais** : conditionnel présent → hypothèse, condition, politesse, souhait, action dépendante d'un « si ».
 
-Exemples :
+2. **Choisir le radical du verbe : ne pas inventer un infinitif en -er.**
+   - **vérifier** est un verbe en **-er** : il garde le **e** de l'infinitif au futur/conditionnel → je vérifi**erai**, je vérifi**erais**.
+   - **conclure**, **inclure**, **exclure** ne sont pas des verbes en **-er** : **concluer**, **incluer**, **excluer** n'existent pas. On n'ajoute donc pas de **e** avant le **r** → je concl**urai**, je concl**urais**, il incl**ura**, elle excl**urait**.
 
-- Demain, je **ferai** les corrections.
-- Si j'avais plus de temps, je **ferais** les corrections.
-- Je **vérifierai** le texte ce soir.
-- Je **vérifierais** le texte si vous me l'envoyiez.
+Tests rapides :
+
+- Remplacer **je** par **nous** pour distinguer futur/conditionnel :
+  - je **vérifierai** → nous **vérifierons** ; je **vérifierais** → nous **vérifierions**.
+  - je **conclurai** → nous **conclurons** ; je **conclurais** → nous **conclurions**.
+- Demander l'infinitif : **vérifier** existe → **vérifierai** ; **conclure** existe mais **concluer** n'existe pas → **conclurai**.
+
+Exemples corrects :
+
+- Demain, je **vérifierai** le texte.
+- Si j'avais plus de temps, je **vérifierais** le texte.
+- Demain, je **conclurai** le rapport.
+- Si les preuves étaient suffisantes, je **conclurais** à une erreur.
+- Avec un peu de chance, nous **conclurons** le marché aujourd'hui.
+- Le contrat **inclura** les conditions de remboursement.
+- D'après nos sources, la police **exclurait** l'hypothèse d'un accident.
+
+Erreurs fréquentes à détecter et corriger :
+
+- Faux : demain, je **vérifierais** le texte. → Correct : demain, je **vérifierai** le texte.
+- Faux : si j'avais le dossier, je **vérifierai** ce point. → Correct : si j'avais le dossier, je **vérifierais** ce point.
+- Faux : je **concluerai** demain. → Correct : je **conclurai** demain.
+- Faux : je **concluerais** si j'avais tous les éléments. → Correct : je **conclurais** si j'avais tous les éléments.
+- Faux : le technicien **concluera** à une mauvaise utilisation. → Correct : le technicien **conclura** à une mauvaise utilisation.
+- Faux : le contrat **incluera** cette clause. → Correct : le contrat **inclura** cette clause.
+- Faux : la police **excluerait** cette hypothèse. → Correct : la police **exclurait** cette hypothèse.
+
+Attention : ne corrige pas **vérifierai** en **vérifirai** ni **vérifierais** en **vérifirais**. Pour les verbes du 1er groupe comme **vérifier**, le **e** avant **-rai/-rais** est normal.
 
 ---
 
@@ -247,39 +269,61 @@ Erreurs fréquentes :
 
 Source vérifiée : Projet Voltaire, fiche « Bien utiliser l’adverbe tout ».
 
-Devant un adjectif, **tout** est souvent un adverbe qui signifie « complètement », « entièrement », « tout à fait ». Comme adverbe, il est normalement invariable.
+Devant un adjectif, **tout** est souvent un adverbe qui signifie « complètement », « entièrement », « tout à fait ». Comme adverbe, il est normalement invariable. Projet Voltaire distingue trois cas : masculin, féminin devant voyelle/h muet, féminin devant consonne/h aspiré.
+
+Méthode obligatoire :
+
+1. Vérifier le sens : peut-on remplacer par **complètement**, **entièrement**, **tout à fait** ?
+   - Oui → **tout** est adverbe : appliquer les règles ci-dessous.
+   - Non, le sens est « chaque », « tous les », « toutes les personnes » → ce n'est pas l'adverbe ; ne pas corriger mécaniquement.
+2. Identifier le genre de l'adjectif et sa première lettre sonore.
+3. Corriger seulement si la forme contredit la règle et le sens.
 
 Cas à distinguer :
 
-1. Adjectif masculin : **tout** reste invariable, au singulier comme au pluriel.
+1. **Adjectif masculin** : **tout** reste invariable, au singulier comme au pluriel.
    - Il est **tout petit**.
    - Ils sont **tout petits**.
    - Il est **tout ému**.
    - Ils sont **tout émus**.
    - Il est **tout étonné**.
    - Ils sont **tout étonnés**.
+   - Attention : **ils sont tous petits** peut être correct si le sens est « tous sont petits » ; ce n'est plus l'adverbe **tout**.
 
-2. Adjectif féminin commençant par une voyelle ou un h muet : **tout** reste invariable.
+2. **Adjectif féminin commençant par une voyelle ou un h muet** : **tout** reste invariable.
    - Elle est **tout émue**.
    - Elles sont **tout émues**.
    - Elle est **tout étonnée**.
    - Elles sont **tout étonnées**.
    - Elle est **tout heureuse**.
+   - Elles sont **tout heureuses**.
    - Elle est **tout hésitante**.
+   - Elles sont **tout hésitantes**.
 
-3. Adjectif féminin commençant par une consonne ou un h aspiré : **tout** s'accorde pour des raisons d'euphonie.
+3. **Adjectif féminin commençant par une consonne ou un h aspiré** : **tout** s'accorde par euphonie.
    - Elle est **toute petite**.
    - Elles sont **toutes petites**.
    - Elle est **toute calme**.
+   - Elle est **toute contente**.
    - Elle est **toute honteuse**.
    - Elles sont **toutes honteuses**.
+
+Erreurs fréquentes à détecter et corriger quand le sens est « complètement » :
+
+- Faux : elle est **tout petite**. → Correct : elle est **toute petite**.
+- Faux : elles sont **tout petites**. → Correct : elles sont **toutes petites**.
+- Faux : elle est **toute étonnée**. → Correct : elle est **tout étonnée**.
+- Faux : elles sont **toutes étonnées** si le sens est « complètement étonnées ». → Correct : elles sont **tout étonnées**.
+- Faux : elle est **toute émue** si le sens est « complètement émue ». → Correct : elle est **tout émue**.
+- Faux : elles sont **toutes hésitantes** si le sens est « complètement hésitantes ». → Correct : elles sont **tout hésitantes**.
 
 Attention importante :
 
 - **tout étonnée** est correct, car « étonnée » commence par une voyelle.
-- **toute étonnée** est fautif si le sens est « complètement étonnée ».
 - **toute petite** est correct, car « petite » commence par une consonne.
-- Ne pas confondre l'adverbe **tout** avec le pronom/déterminant **tous/toutes** : « elles sont toutes émues » peut signifier « toutes les personnes sont émues », ce n'est plus le même emploi.
+- **toute honteuse** est correct, car « honteuse » commence par un **h aspiré**.
+- **tout heureuse** et **tout hésitante** sont corrects si le **h** est muet.
+- **elles sont toutes émues / toutes étonnées / toutes hésitantes** peut être correct si le sens est « toutes les personnes sont émues/étonnées/hésitantes ». Dans ce cas, **toutes** n'est pas l'adverbe **tout** : ne pas signaler une faute sans le contexte.
 
 ---
 
@@ -287,17 +331,25 @@ Attention importante :
 
 ## 12. Participe passé employé avec l'auxiliaire « être »
 
-Source vérifiée : Projet Voltaire, fiche « elles sont venu ou elles sont venues ? ils sont venu ou ils sont venus ? ».
+Sources vérifiées : Projet Voltaire, fiche « elles sont venu ou elles sont venues ? ils sont venu ou ils sont venus ? » et dossier « Accorder le participe passé ».
 
-Avec **être**, le participe passé s'accorde avec le sujet, en genre et en nombre.
+Avec **être**, le participe passé s'accorde **toujours avec le sujet du verbe, en genre et en nombre**. Cette règle vaut aussi dans les formes composées ou passives où **être** apparaît sous une autre forme : **est**, **sont**, **était**, **étaient**, **sera**, **seront**, **a été**, **ont été**, **avait été**, **doit être**, **doivent être**, etc.
 
-Méthode :
+Méthode Projet Voltaire :
 
-1. Repérer l'auxiliaire **être** : est, sont, était, seront, ont été, a été, doivent être, etc.
-2. Demander : « Qui est + participe passé ? »
-3. Accorder avec le sujet.
+1. Repérer l'auxiliaire **être** ou une forme composée de **être**.
+2. Poser la question : **« Qui est/sera/a été/doit être + participe passé ? »**
+3. Répondre avec le sujet réel, même s'il est éloigné du participe.
+4. Accorder le participe passé avec ce sujet : masculin/féminin, singulier/pluriel.
 
-Exemples :
+Table de décision rapide :
+
+- sujet masculin singulier → participe sans marque féminine/plurielle : **venu**, **arrivé**, **installé**.
+- sujet féminin singulier → **-e** : **venue**, **arrivée**, **installée**.
+- sujet masculin pluriel ou groupe mixte → **-s** : **venus**, **arrivés**, **installés**.
+- sujet féminin pluriel → **-es** : **venues**, **arrivées**, **installées**.
+
+Exemples corrects :
 
 - Il est **allé** au cinéma.
 - Ils sont **allés** au cinéma.
@@ -305,17 +357,33 @@ Exemples :
 - Elles sont **allées** au cinéma.
 - Elle est **venue**.
 - Elles sont **venues**.
+- Les factures ont été **éditées** grâce à ce logiciel.
+- Ces normes seront **appliquées** partout.
+- Une enquête a été **ordonnée** par le parquet.
+- Les logiciels nécessaires ont été **installés** sur les machines.
+- Les mises à jour doivent être **effectuées** régulièrement.
+- La ministre est **arrivée** à vélo.
 - Les lettres sont **envoyées**.
 - Les dossiers sont **terminés**.
 
-Erreurs fréquentes :
+Erreurs fréquentes à détecter et corriger :
 
-- Faux : Ils sont **allé** au cinéma.
-- Correct : Ils sont **allés** au cinéma.
-- Faux : Elles sont **venu**.
-- Correct : Elles sont **venues**.
+- Faux : ils sont **venu**. → Correct : ils sont **venus**.
+- Faux : elles sont **venu**. → Correct : elles sont **venues**.
+- Faux : elle est **venu**. → Correct : elle est **venue**.
+- Faux : ils sont **allé** au cinéma. → Correct : ils sont **allés** au cinéma.
+- Faux : les factures ont été **édité**. → Correct : les factures ont été **éditées**.
+- Faux : ces normes seront **appliqués**. → Correct : ces normes seront **appliquées**.
+- Faux : une enquête a été **ordonné**. → Correct : une enquête a été **ordonnée**.
+- Faux : les logiciels ont été **installé**. → Correct : les logiciels ont été **installés**.
+- Faux : les mises à jour doivent être **effectués**. → Correct : les mises à jour doivent être **effectuées**.
+- Faux : la ministre est **arrivé**. → Correct : la ministre est **arrivée**.
 
-Attention : les verbes pronominaux utilisent souvent **être**, mais leur accord peut dépendre de la fonction du pronom réfléchi. Ne pas appliquer mécaniquement la règle sans analyser le COD/COI.
+Points d'attention pour éviter les faux positifs :
+
+- **Vous** peut désigner une seule personne par politesse : **vous êtes venu** (homme), **vous êtes venue** (femme), **vous êtes venus/venues** (plusieurs personnes). Le contexte décide.
+- Les verbes pronominaux utilisent souvent **être**, mais leur accord peut dépendre de la fonction du pronom réfléchi : COD ou COI. Ne pas appliquer mécaniquement la règle sans analyser le complément. Exemple : **elles se sont lavées** mais **elles se sont lavé les mains**.
+- Le participe peut être éloigné du sujet dans les constructions passives : toujours revenir au sujet grammatical, pas au complément.
 
 ---
 
@@ -992,6 +1060,10 @@ Erreur fréquente :
 | voir / voire | **voir** = consulter ; **voire** = et même | remplacer par « et même » |
 | ce faisant / se faisant | **ce faisant** = en faisant cela | remplacer par « en faisant cela » |
 | pour ce faire / pour se faire | **pour ce faire** = pour faire cela | remplacer par « pour faire cela » |
+| je vérifierai / vérifierais | futur **-ai** ; conditionnel **-ais** | remplacer je par nous |
+| je conclurai / conclurais | **conclure**, pas concluer : pas de e avant r | vérifier l'infinitif |
+| tout petite / toute petite / tout étonnée | **toute petite** mais **tout étonnée** | tout = complètement + voyelle/consonne |
+| participe passé avec être | accord avec le sujet : venus, venues, éditées | « Qui est/a été/doit être ? » |
 | conseil / conseille | **conseil** nom ; **conseille** verbe | un conseil / je conseille |
 | travail / travaille | **travail** nom ; **travaille** verbe | le travail / il travaille |
 | envoi / envoie | **envoi** nom ; **envoie** verbe | un envoi / j'envoie |
